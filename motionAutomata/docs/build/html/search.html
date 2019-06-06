@@ -1,0 +1,262 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Search &mdash; commonroad_search 2019a documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/searchtools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="#" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="commonroad_search.html" class="icon icon-home"> commonroad_search
+          
+
+          
+            
+            <img src="_static/commonroad_white150.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2019a
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="#" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install/index.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install/index.html#hint">Hint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install/index.html#setup-of-the-conda-environment">Setup of the conda environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install/index.html#how-to-install">How to install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install/index.html#id1">1. CommonRoad_io</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install/index.html#id2">2. CommonRoad_Collision_Checker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install/index.html#boundary">3. Boundary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install/index.html#how-to-use">How to use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install/index.html#implement-your-own-search-algorithm">Implement your own search algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install/index.html#trouble-shooting">Trouble Shooting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">commonroad_search API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/index.html#modules">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/MotionPlanner.html">Module Motion Planner</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/MotionPlanner.html#motion-planner">Motion Planner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/MotionPlanner.html#priority-queue">Priority Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/MotionPlanner.html#other-functions">Other Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/MotionAutomata.html">Module Motion Automata</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/MotionAutomata.html#module-Automata.MotionAutomata">Motion Automata</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/MotionPrimitiveParser.html">Module Motion Primitive Parser</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/MotionPrimitiveParser.html#module-Automata.MotionPrimitiveParser">Motion Primitive Parser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/MotionPrimitiveParser.html#other-functions">Other Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/States.html">Module States</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/States.html#module-Automata.States">Start State</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/States.html#final-state">Final State</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/TrajectoryParser.html">Module Trajectory Parser</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/TrajectoryParser.html#module-Automata.TrajectoryParser">Trajectory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/TrajectoryParser.html#trajectory-set">Trajectory Set</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/TrajectoryParser.html#trajectory-parser">Trajectory Parser</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/MotionPrimitive.html">Module Motion Primitive</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/MotionPrimitive.html#module-Automata.MotionPrimitive">Motion Primitive</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="commonroad_search.html">commonroad_search</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="commonroad_search.html">Docs</a> &raquo;</li>
+        
+      <li>Search</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <noscript>
+  <div id="fallback" class="admonition warning">
+    <p class="last">
+      Please activate JavaScript to enable the search
+      functionality.
+    </p>
+  </div>
+  </noscript>
+
+  
+  <div id="search-results">
+  
+  </div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Sebastian Kaster, Andong Tan
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+  
+  <script type="text/javascript">
+    jQuery(function() { Search.loadIndex("searchindex.js"); });
+  </script>
+  
+  <script type="text/javascript" id="searchindexloader"></script>
+   
+
+
+</body>
+</html>

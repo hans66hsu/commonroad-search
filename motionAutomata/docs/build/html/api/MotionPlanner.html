@@ -1,0 +1,972 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module Motion Planner &mdash; commonroad_search 2019a documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Module Motion Automata" href="MotionAutomata.html" />
+    <link rel="prev" title="commonroad_search API" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../commonroad_search.html" class="icon icon-home"> commonroad_search
+          
+
+          
+            
+            <img src="../_static/commonroad_white150.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2019a
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../install/index.html#hint">Hint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install/index.html#setup-of-the-conda-environment">Setup of the conda environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install/index.html#how-to-install">How to install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install/index.html#id1">1. CommonRoad_io</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install/index.html#id2">2. CommonRoad_Collision_Checker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install/index.html#boundary">3. Boundary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install/index.html#how-to-use">How to use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install/index.html#implement-your-own-search-algorithm">Implement your own search algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install/index.html#trouble-shooting">Trouble Shooting</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">commonroad_search API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#modules">Modules</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Module Motion Planner</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#motion-planner">Motion Planner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#priority-queue">Priority Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#other-functions">Other Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="MotionAutomata.html">Module Motion Automata</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="MotionAutomata.html#module-Automata.MotionAutomata">Motion Automata</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="MotionPrimitiveParser.html">Module Motion Primitive Parser</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="MotionPrimitiveParser.html#module-Automata.MotionPrimitiveParser">Motion Primitive Parser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="MotionPrimitiveParser.html#other-functions">Other Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="States.html">Module States</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="States.html#module-Automata.States">Start State</a></li>
+<li class="toctree-l4"><a class="reference internal" href="States.html#final-state">Final State</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="TrajectoryParser.html">Module Trajectory Parser</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="TrajectoryParser.html#module-Automata.TrajectoryParser">Trajectory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TrajectoryParser.html#trajectory-set">Trajectory Set</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TrajectoryParser.html#trajectory-parser">Trajectory Parser</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="MotionPrimitive.html">Module Motion Primitive</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="MotionPrimitive.html#module-Automata.MotionPrimitive">Motion Primitive</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../commonroad_search.html">commonroad_search</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../commonroad_search.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">commonroad_search API</a> &raquo;</li>
+        
+      <li>Module Motion Planner</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/MotionPlanner.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-motion-planner">
+<h1>Module Motion Planner<a class="headerlink" href="#module-motion-planner" title="Permalink to this headline">¶</a></h1>
+<p>The motion planner module in commonroad_search is based on search. The motion planner class is
+used to construct your planner, where you can define your own cost function and search algorithm in “calc_heuristic_cost” and “search_alg”. You can use all available measurements offered in this module to construct your own cost function. The priority queue class is a helper class for defining the search algorithm.</p>
+<p>The starting node (start state of the planning problem) of the search tree is defined by the loaded scenario (a scenario can have more than one planning problems with different initial state and goal state). Other nodes of the search tree consist of different motion primitives. Each motion primitive is a short trajectory which consists of several states. The aim is to search the tree and find a path (a combination of primitives) that satisfies the conditions of the goal state without causing any collisions.</p>
+<span class="target" id="module-Automata.MotionPlanner"></span><div class="section" id="motion-planner">
+<h2>Motion Planner<a class="headerlink" href="#motion-planner" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="motionplanner-class">
+<h3><code class="docutils literal notranslate"><span class="pre">MotionPlanner</span></code> class<a class="headerlink" href="#motionplanner-class" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="Automata.MotionPlanner.MotionPlanner">
+<em class="property">class </em><code class="descclassname">Automata.MotionPlanner.</code><code class="descname">MotionPlanner</code><span class="sig-paren">(</span><em>scenario</em>, <em>planningProblem</em>, <em>automata</em>, <em>state_tuple</em>, <em>shapeEgoVehicle</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="Automata.MotionPlanner.MotionPlanner.map_obstacles_to_lanelets">
+<code class="descname">map_obstacles_to_lanelets</code><span class="sig-paren">(</span><em>time_step</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner.map_obstacles_to_lanelets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner.map_obstacles_to_lanelets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds all obstacles that are located in every lanelet at time step t and returns a dictionary where obstacles are stored according to their lanelet ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>time_step</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – maps obstacles in this time step to the lanelet</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.MotionPlanner.get_obstacles">
+<code class="descname">get_obstacles</code><span class="sig-paren">(</span><em>laneletObj</em>, <em>time_step</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner.get_obstacles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner.get_obstacles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the subset of obstacles, which are located in the given lanelet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>laneletObj</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Lanelet</span></code>) – specify the lanelet object to get its obstacles</p></li>
+<li><p><strong>time_step</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – the time step in which the occupancy of obstacles is checked</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Obstacle</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.MotionPlanner.calc_lanelet_cost">
+<code class="descname">calc_lanelet_cost</code><span class="sig-paren">(</span><em>curLanelet</em>, <em>dist</em>, <em>visited_lanelets</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner.calc_lanelet_cost"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner.calc_lanelet_cost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates distances of all lanelets which can be reached through recursive adjacency/predecessor relationship by the current lanelet. 
+This is a recursive implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>curLanelet</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Lanelet</span></code>) – the current lanelet object (often set to the goal lanelet)</p></li>
+<li><p><strong>dist</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – the initial distance between 2 adjacent lanelets (often set to 1). This value will increase recursively during the execution of this function.</p></li>
+<li><p><strong>visited_lanelets</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – list of visited lanelet ids. In the iterations, visited lanelets will not be considered. This value changes during the recursive implementation.</p></li>
+</ul>
+</dd>
+</dl>
+<p>The calculated costs will be stored in dictionary self.lanelet_cost[Lanelet].</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.MotionPlanner.calc_lanelet_orientation">
+<code class="descname">calc_lanelet_orientation</code><span class="sig-paren">(</span><em>lanelet_id</em>, <em>pos</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner.calc_lanelet_orientation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner.calc_lanelet_orientation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns lanelet orientation (angle in radian, counter-clockwise defined) at the given position and lanelet id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lanelet_id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – id of the lanelet, based on which the orientation is calculated</p></li>
+<li><p><strong>pos</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – position, where orientation is calculated. (Often the position of the obstacle)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.MotionPlanner.calc_angle_to_goal">
+<code class="descname">calc_angle_to_goal</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner.calc_angle_to_goal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner.calc_angle_to_goal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the orientation of the goal (angle in radian, counter-clockwise defined) with respect to the position of the state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>state</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code>) – the angle between this state and the goal will be calculated</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.MotionPlanner.lanelets_of_position">
+<code class="descname">lanelets_of_position</code><span class="sig-paren">(</span><em>lanelets</em>, <em>state</em>, <em>diff=0.6283185307179586</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner.lanelets_of_position"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner.lanelets_of_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all lanelets, whose angle to the orientation of the input state are smaller than pi/5.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lanelets</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – potential lanelets</p></li>
+<li><p><strong>state</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code>) – the input state</p></li>
+<li><p><strong>diff</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – acceptable angle difference between the state and the lanelet</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Lanelet</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.MotionPlanner.dist_to_closest_obstacle">
+<code class="descname">dist_to_closest_obstacle</code><span class="sig-paren">(</span><em>lanelet_id</em>, <em>pos</em>, <em>time_step</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner.dist_to_closest_obstacle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner.dist_to_closest_obstacle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns distance between the given position and the center of the closest obstacle in the given lanelet (specified by lanelet id).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lanelet_id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – the id of the lanelet where the distance to obstacle is calculated</p></li>
+<li><p><strong>pos</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – current input position</p></li>
+<li><p><strong>time_step</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – current time step</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.MotionPlanner.num_obstacles_in_lanelet_at_time_step">
+<code class="descname">num_obstacles_in_lanelet_at_time_step</code><span class="sig-paren">(</span><em>time_step</em>, <em>lanelet_id</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner.num_obstacles_in_lanelet_at_time_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner.num_obstacles_in_lanelet_at_time_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of obstacles in the given lanelet (specified by lanelet id) at time step t.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time_step</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – time step</p></li>
+<li><p><strong>lanelet_id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – specifies the lanelet</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.MotionPlanner.is_adjacent">
+<code class="descname">is_adjacent</code><span class="sig-paren">(</span><em>start_lanelet_id</em>, <em>final_lanelet_id</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner.is_adjacent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner.is_adjacent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if the the final lanelet is adjacent to the start lanelet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_lanelet_id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – id of the first lanelet (start lanelet)</p></li>
+<li><p><strong>final_lanelet_id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – id of the second lanelet (final lanelet)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.MotionPlanner.is_successor">
+<code class="descname">is_successor</code><span class="sig-paren">(</span><em>start_lanelet_id</em>, <em>final_lanelet_id</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner.is_successor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner.is_successor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if the the final lanelet is a successor of the start lanelet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_lanelet_id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – id of the first lanelet (start lanelet)</p></li>
+<li><p><strong>final_lanelet_id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – id of the second lanelet (final lanelet)</p></li>
+</ul>
+</dd>
+</dl>
+<p>Return type: bool</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.MotionPlanner.is_goal_in_lane">
+<code class="descname">is_goal_in_lane</code><span class="sig-paren">(</span><em>lanelet_id</em>, <em>traversed_lanelets=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner.is_goal_in_lane"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner.is_goal_in_lane" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if the goal is in the given lanelet or any successor (including all successors of successors) of the given lanelet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lanelet_id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – the id of the given lanelet</p></li>
+<li><p><strong>traversed_lanelets</strong> – helper variable which stores potential path (a list of lanelet id) to goal lanelet. Default value is None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.MotionPlanner.calc_time_cost">
+<code class="descname">calc_time_cost</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner.calc_time_cost"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner.calc_time_cost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns time cost (number of time steps) to perform the given path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code>]) – the path whose time cost is calculated</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.MotionPlanner.calc_path_efficiency">
+<code class="descname">calc_path_efficiency</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner.calc_path_efficiency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner.calc_path_efficiency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the path efficiency = travelled_distance / time_cost</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code>]) – the path whose efficiency is calculated</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.MotionPlanner.calc_heuristic_distance">
+<code class="descname">calc_heuristic_distance</code><span class="sig-paren">(</span><em>state</em>, <em>distance_type=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner.calc_heuristic_distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner.calc_heuristic_distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the heuristic distance between the current state and the goal state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>state</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code>) – the state, whose heuristic distance to the goal is calculated</p></li>
+<li><p><strong>distance_type</strong> – default is euclidean distance. For other distance type please refer to the function “distance(pos1: np.ndarray, pos2: np.ndarray, type=0)”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.MotionPlanner.calc_heuristic_lanelet">
+<code class="descname">calc_heuristic_lanelet</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner.calc_heuristic_lanelet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner.calc_heuristic_lanelet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the distance between every individual state of the path and the centers of the path’s corresponding lanelets and sum them up.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code>]) – the path, whose heuristics is calculated</p>
+</dd>
+</dl>
+<p>Returns the heuristic distance of the path (float), id of the end lanelet of the given path (list) and the start lanelet id (list). 
+End lanelet means the lanelet where the last state of the path is in, start lanelet means the lanelet corresponding to the first state of the path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.MotionPlanner.reached_goal">
+<code class="descname">reached_goal</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner.reached_goal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner.reached_goal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Goal-test every state of the path and returns true if one of the state satisfies all conditions for the goal region: position, orientation, velocity, time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code>]) – the path to be goal-tested</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.MotionPlanner.remove_states_behind_goal">
+<code class="descname">remove_states_behind_goal</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner.remove_states_behind_goal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner.remove_states_behind_goal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes all states that are behind the state which statisfies goal state conditions and returns the pruned path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code>]) – the path to be pruned</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.MotionPlanner.check_collision_free">
+<code class="descname">check_collision_free</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner.check_collision_free"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner.check_collision_free" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if path collides with an obstacle. Returns true for no collision and false otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code>]) – The path you want to check</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.MotionPlanner.translate_primitive_to_current_state">
+<code class="descname">translate_primitive_to_current_state</code><span class="sig-paren">(</span><em>primitive</em>, <em>currentPath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner.translate_primitive_to_current_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner.translate_primitive_to_current_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses the trajectory defined in the given primitive, translates it towards the last state of current path and returns the list of new path.
+In the newly appended part (created through translation of the primitive) of the path, the position, orientation and time step are changed, but the velocity is not changed.
+Attention: The input primitive itself will not be changed after this operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>primitive</strong> (<a class="reference internal" href="MotionPrimitive.html#Automata.MotionPrimitive.MotionPrimitive" title="Automata.MotionPrimitive.MotionPrimitive"><code class="xref py py-class docutils literal notranslate"><span class="pre">MotionPrimitive</span></code></a>) – the primitive to be translated</p></li>
+<li><p><strong>currentPath</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code>]) – the path whose last state is the goal state for the translation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.MotionPlanner.append_path">
+<code class="descname">append_path</code><span class="sig-paren">(</span><em>currentPath</em>, <em>newPath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner.append_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner.append_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends a new path to the current path and returns the whole path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>currentPath</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code>]) – current path which is to be extended</p></li>
+<li><p><strong>newPath</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code>]) – new path which is going to be added to the current path</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.MotionPlanner.get_successor_primitives">
+<code class="descname">get_successor_primitives</code><span class="sig-paren">(</span><em>cur_primitive</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner.get_successor_primitives"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner.get_successor_primitives" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all possible successor primitives of the current primitive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cur_primitive</strong> (<a class="reference internal" href="MotionPrimitive.html#Automata.MotionPrimitive.MotionPrimitive" title="Automata.MotionPrimitive.MotionPrimitive"><code class="xref py py-class docutils literal notranslate"><span class="pre">MotionPrimitive</span></code></a>) – current primitive</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="MotionPrimitive.html#Automata.MotionPrimitive.MotionPrimitive" title="Automata.MotionPrimitive.MotionPrimitive"><code class="xref py py-class docutils literal notranslate"><span class="pre">MotionPrimitive</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.MotionPlanner.calc_heuristic_cost">
+<code class="descname">calc_heuristic_cost</code><span class="sig-paren">(</span><em>path</em>, <em>curPos</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner.calc_heuristic_cost"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner.calc_heuristic_cost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns heuristic cost for the path.
+You should define your own cost function here.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code>]) – the heuristic cost is calculated based on this path</p></li>
+<li><p><strong>curPos</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code>) – current position/state of your path. Every state has the following variables: position, velocity, orientation, time_step</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.MotionPlanner.search_alg">
+<code class="descname">search_alg</code><span class="sig-paren">(</span><em>startSuccessor</em>, <em>maxTreeDepth</em>, <em>status</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#MotionPlanner.search_alg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.MotionPlanner.search_alg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the path and the used primitives as a tuple.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>startSuccessor</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="MotionPrimitive.html#Automata.MotionPrimitive.MotionPrimitive" title="Automata.MotionPrimitive.MotionPrimitive"><code class="xref py py-class docutils literal notranslate"><span class="pre">MotionPrimitive</span></code></a>]) – all possible primitives for the start state</p></li>
+<li><p><strong>maxTreeDepth</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – maximum number of concatenated primitives</p></li>
+<li><p><strong>status</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>) – helper values including ‘cost_so_far’, ‘time_step’, ‘orientation’, ‘velocity’, which are used for the visualization in the jupyter notebook</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="MotionPrimitive.html#Automata.MotionPrimitive.MotionPrimitive" title="Automata.MotionPrimitive.MotionPrimitive"><code class="xref py py-class docutils literal notranslate"><span class="pre">MotionPrimitive</span></code></a>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="priority-queue">
+<h2>Priority Queue<a class="headerlink" href="#priority-queue" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="priorityqueue-class">
+<h3><code class="docutils literal notranslate"><span class="pre">PriorityQueue</span></code> class<a class="headerlink" href="#priorityqueue-class" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="Automata.MotionPlanner.PriorityQueue">
+<em class="property">class </em><code class="descclassname">Automata.MotionPlanner.</code><code class="descname">PriorityQueue</code><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#PriorityQueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.PriorityQueue" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="Automata.MotionPlanner.PriorityQueue.empty">
+<code class="descname">empty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#PriorityQueue.empty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.PriorityQueue.empty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test whether the queue is empty. Returns true if the queue is empty.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.PriorityQueue.put">
+<code class="descname">put</code><span class="sig-paren">(</span><em>item</em>, <em>priority</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#PriorityQueue.put"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.PriorityQueue.put" title="Permalink to this definition">¶</a></dt>
+<dd><p>Put an item into the queue and count the number of elements in the queue. The number is saved in self.count.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item</strong> – the element to be put in the queue</p></li>
+<li><p><strong>priority</strong> – the value used to sort/prioritize elements in the queue. It’s often the value of some cost function</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Automata.MotionPlanner.PriorityQueue.get">
+<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#PriorityQueue.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.PriorityQueue.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pop the smallest item off the heap (Priority queue) if the queue is not empty.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="other-functions">
+<h2>Other Functions<a class="headerlink" href="#other-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="Automata.MotionPlanner.findClosestVertex">
+<code class="descclassname">Automata.MotionPlanner.</code><code class="descname">findClosestVertex</code><span class="sig-paren">(</span><em>centerVertices</em>, <em>pos</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#findClosestVertex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.findClosestVertex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the index of the closest center vertice to the given position.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center_vertices</strong> – the vertices of the center line of the Lanelet described as a polyline [[x0,x1,…,xn],[y0,y1,…,yn]]</p></li>
+<li><p><strong>pos</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the closest vertex to this position will be found</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="Automata.MotionPlanner.calcAngleOfPosition">
+<code class="descclassname">Automata.MotionPlanner.</code><code class="descname">calcAngleOfPosition</code><span class="sig-paren">(</span><em>centerVertices</em>, <em>pos</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#calcAngleOfPosition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.calcAngleOfPosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the angle (in world coordinate, radian) of the line defined by 2 nearest lanelet center vertices to the given position.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>centerVertices</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – lanelet center vertices, whose distance to the given position is considered</p></li>
+<li><p><strong>pos</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the input position</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="Automata.MotionPlanner.distToClosestPointOnLine">
+<code class="descclassname">Automata.MotionPlanner.</code><code class="descname">distToClosestPointOnLine</code><span class="sig-paren">(</span><em>vertexA</em>, <em>vertexB</em>, <em>pos</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#distToClosestPointOnLine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.distToClosestPointOnLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the distance of the given position to a line segment (e.g. the nearest lanelet center line segment to the given position).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vertexA</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the start point of the line segment</p></li>
+<li><p><strong>vertexB</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the end point of the line segment</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="Automata.MotionPlanner.findDistanceToNearestPoint">
+<code class="descclassname">Automata.MotionPlanner.</code><code class="descname">findDistanceToNearestPoint</code><span class="sig-paren">(</span><em>centerVertices</em>, <em>pos</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#findDistanceToNearestPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.findDistanceToNearestPoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the closest euclidean distance to a polyline (e.g. defined by lanelet center vertices) according to the given position.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>centerVertices</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the poyline, between which and the given position the distance is calculated</p></li>
+<li><p><strong>pos</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the input position</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="Automata.MotionPlanner.calc_travelled_distance">
+<code class="descclassname">Automata.MotionPlanner.</code><code class="descname">calc_travelled_distance</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#calc_travelled_distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.calc_travelled_distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the travelled distance of the given path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param</dt>
+<dd class="field-odd"><p>the path, whose euclidean distance is calculated</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="Automata.MotionPlanner.euclideanDistance">
+<code class="descclassname">Automata.MotionPlanner.</code><code class="descname">euclideanDistance</code><span class="sig-paren">(</span><em>pos1</em>, <em>pos2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#euclideanDistance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.euclideanDistance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the euclidean distance between 2 points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the first point</p></li>
+<li><p><strong>pos2</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the second point</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="Automata.MotionPlanner.manhattanDistance">
+<code class="descclassname">Automata.MotionPlanner.</code><code class="descname">manhattanDistance</code><span class="sig-paren">(</span><em>pos1</em>, <em>pos2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#manhattanDistance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.manhattanDistance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the manhattan distance between 2 points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the first point</p></li>
+<li><p><strong>pos2</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the second point</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="Automata.MotionPlanner.chebyshevDistance">
+<code class="descclassname">Automata.MotionPlanner.</code><code class="descname">chebyshevDistance</code><span class="sig-paren">(</span><em>pos1</em>, <em>pos2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#chebyshevDistance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.chebyshevDistance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the chebyshev distance between 2 points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the first point</p></li>
+<li><p><strong>pos2</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the second point</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="Automata.MotionPlanner.sumOfSquaredDifference">
+<code class="descclassname">Automata.MotionPlanner.</code><code class="descname">sumOfSquaredDifference</code><span class="sig-paren">(</span><em>pos1</em>, <em>pos2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#sumOfSquaredDifference"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.sumOfSquaredDifference" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the squared euclidean distance between 2 points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the first point</p></li>
+<li><p><strong>pos2</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the second point</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="Automata.MotionPlanner.meanAbsoluteError">
+<code class="descclassname">Automata.MotionPlanner.</code><code class="descname">meanAbsoluteError</code><span class="sig-paren">(</span><em>pos1</em>, <em>pos2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#meanAbsoluteError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.meanAbsoluteError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a half of the manhattan distance between 2 points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the first point</p></li>
+<li><p><strong>pos2</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the second point</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="Automata.MotionPlanner.meanSquaredError">
+<code class="descclassname">Automata.MotionPlanner.</code><code class="descname">meanSquaredError</code><span class="sig-paren">(</span><em>pos1</em>, <em>pos2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#meanSquaredError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.meanSquaredError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the mean of squared difference between 2 points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the first point</p></li>
+<li><p><strong>pos2</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the second point</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="Automata.MotionPlanner.canberraDistance">
+<code class="descclassname">Automata.MotionPlanner.</code><code class="descname">canberraDistance</code><span class="sig-paren">(</span><em>pos1</em>, <em>pos2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#canberraDistance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.canberraDistance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the canberra distance between 2 points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the first point</p></li>
+<li><p><strong>pos2</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the second point</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="Automata.MotionPlanner.cosineDistance">
+<code class="descclassname">Automata.MotionPlanner.</code><code class="descname">cosineDistance</code><span class="sig-paren">(</span><em>pos1</em>, <em>pos2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#cosineDistance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.cosineDistance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the cosine distance between 2 points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the first point</p></li>
+<li><p><strong>pos2</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the second point</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="Automata.MotionPlanner.distance">
+<code class="descclassname">Automata.MotionPlanner.</code><code class="descname">distance</code><span class="sig-paren">(</span><em>pos1</em>, <em>pos2</em>, <em>type=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the distance between 2 points, the type is specified by ‘type’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the first point</p></li>
+<li><p><strong>pos2</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the second point</p></li>
+</ul>
+</dd>
+</dl>
+<p>type: 0 means euclideanDistance,</p>
+<p>1 means manhattanDistance,</p>
+<p>2 means chebyshevDistance,</p>
+<p>3 means sumOfSquaredDifference,</p>
+<p>4 means meanAbsoluteError,</p>
+<p>5 means meanSquaredError,</p>
+<p>6 means canberraDistance,</p>
+<p>7 means cosineDistance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="Automata.MotionPlanner.curvature_of_polyline">
+<code class="descclassname">Automata.MotionPlanner.</code><code class="descname">curvature_of_polyline</code><span class="sig-paren">(</span><em>polyline</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#curvature_of_polyline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.curvature_of_polyline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the curvature of the given polyline.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>polyline</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the polyline to be calculated</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="Automata.MotionPlanner.orientation_diff">
+<code class="descclassname">Automata.MotionPlanner.</code><code class="descname">orientation_diff</code><span class="sig-paren">(</span><em>orientation_1</em>, <em>orientation_2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#orientation_diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.orientation_diff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the orientation difference between 2 orientations in radians.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>orientation_1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – the first orientation.</p></li>
+<li><p><strong>orientation_2</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – the second orientation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="Automata.MotionPlanner.length_of_polyline">
+<code class="descclassname">Automata.MotionPlanner.</code><code class="descname">length_of_polyline</code><span class="sig-paren">(</span><em>polyline</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Automata/MotionPlanner.html#length_of_polyline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Automata.MotionPlanner.length_of_polyline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the length of the polyline.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>polyline</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – the polyline, whose length is calculated</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="MotionAutomata.html" class="btn btn-neutral float-right" title="Module Motion Automata" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="commonroad_search API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Sebastian Kaster, Andong Tan
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
