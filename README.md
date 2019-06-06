@@ -36,7 +36,7 @@ Later in the Jupyter Notebook, you should select this kernel so that everything 
 This software has three main dependencies to install.
 
 ### 1. CommonRoad
-Go to folder /primitive_planner/commonRoad_root/tools/commonroad_io/Python and install the commonroad environment:
+Go to folder commonRoad_root/tools/commonroad_io/Python and install the commonroad environment:
 ```sh
   $ conda install networkx
   $ python setup.py install
@@ -44,14 +44,14 @@ Go to folder /primitive_planner/commonRoad_root/tools/commonroad_io/Python and i
 
 
 ### 2. CommonRoad-Collision-Checker
-Go to folder /primitive_planner/commonRoad_root/tools/commonroad-collision-checker/ and follow the Readme file.
+Go to folder commonRoad_root/tools/commonroad-collision-checker/ and follow the Readme file.
 
 ### 3. Boundary
-Go to folder /primitive_planner/commonRoad_root/tools/ and follow the Readme file. Alternatively, you can also use the second method suggested in the troubleshoot.
+Go to folder commonRoad_root/tools/ and follow the Readme file. Alternatively, you can also use the second method suggested in the troubleshoot.
 
 ## How to use
 
-Go to /primitive_planner/motionAutomata/notebooks and start Jupyter:
+Go to motionAutomata/notebooks and start Jupyter:
 ```sh
   $ jupyter notebook
 ```
@@ -66,13 +66,13 @@ In case that the jupyter widget is not working (section: Visualize planned traje
 
 ## Implement your own search algorithm
 
-Go to /primitive-planner/motionAutomata/Automata and open MotionPlanner.py. Insert the search algorithm of your choice in the function:
+Go to motionAutomata/Automata and open MotionPlanner.py. Insert the search algorithm of your choice in the function:
 
 ```python
   def search_alg(self, startSuccessor, maxTreeDepth, status)
 ```
 
-There are already 2 search algorithms (A star and Greedy-best-first search) implemented as examples for you. Please check the first cell of the notebook to see how to use them. 
+There are already 2 search algorithms (A star and Greedy-best-first search) implemented as examples for you. Please check the first cell of the notebook to see how to use them.
 
 
 

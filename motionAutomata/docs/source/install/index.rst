@@ -103,7 +103,7 @@ In case that the jupyter widget is not working (section: Visualize planned traje
 Implement your own search algorithm
 ====================================
 
-Go to /primitive-planner/motionAutomata/Automata and open MotionPlanner.py. Insert the search algorithm of your choice in the function:
+Go to motionAutomata/Automata and open MotionPlanner.py. Insert the search algorithm of your choice in the function:
 
 .. code-block:: python
 
