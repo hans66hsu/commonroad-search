@@ -61,7 +61,7 @@ templates_path = ['_templates']
 source_suffix = '.rst'
 
 # The master toctree document.
-master_doc = 'commonroad_search'
+master_doc = 'index'
 
 # General information about the project.
 project = 'commonroad_search'
