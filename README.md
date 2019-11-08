@@ -16,8 +16,8 @@ commonroad-search/
 		├motion_primitives_generator/
 		└tutorials/
 	├scenarios/
-		├../
-		└../
+		├exercise/
+		└tutorial/
 	└solutions/ 
 ```
 The codes are written in Python 3.7 and tested on Ubuntu 18.04. Please follow the installation guide below and further proceed with `notebooks/tutorials/0_Guide_for_Exercise.pdf`. 
