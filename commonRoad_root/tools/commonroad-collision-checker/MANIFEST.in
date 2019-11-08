@@ -1,2 +1,0 @@
-graft commonroad_cc
-include *.so

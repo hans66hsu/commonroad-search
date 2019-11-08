@@ -1,3 +1,0 @@
-Permission is hereby granted to use the commonroad-collision-checker under the terms of the Modified BSD license provided that the license requirements for optional plugins and dependencies are also met.
-
-

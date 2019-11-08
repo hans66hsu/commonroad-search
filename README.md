@@ -1,90 +1,102 @@
-# Efficient Online Planning Using Maneuver Automata
+# Graph Search-Based Motion Planner with Motion Primitives
 
-The software is written in Python 3.7 and tested on Linux and macOS.
+This is a programming exercise for the lecture **Introduction to Artificial Intelligence** (WS19) delivered at the  Department of Informatics, TUM. Please clone this repository or download it using the button at the upper-right corner. The repository has the following folder structure:
+``` code-block:: text
+commonroad-search/
+	├GSMP/
+		├motion_automata/
+			├automata/
+			├motion_primitives/
+			└vehicle_model/
+		└tools/
+			├commonroad-collision-checker/
+			└commonroad-road-boundary/
+	├notebooks/	
+		├batch_processing/
+		├motion_primitives_generator/
+		└tutorials/
+	├scenarios/
+		├../
+		└../
+	└solutions/ 
+```
+The codes are written in Python 3.7 and tested on Ubuntu 18.04. Please follow the installation guide below and further proceed with `notebooks/tutorials/0_Guide_for_Exercise.pdf`. 
 
 ## Before you start
-We recommand to use Anaconda to manage your environment so that even if you mess up something, you can always restart safely.
-(https://conda.io/docs/user-guide/tasks/manage-environments.html)
 
-To create a new environment:
-```sh
-  $ conda create -n commonroad-py37 python=3.7
+We recommend using [Anaconda](https://www.anaconda.com/) to manage your environment so that even if you mess up something, you can always have a safe and clean restart. A guide for managing the environments can be found [here](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html). Also, the usage of [PyCharm](https://www.jetbrains.com/pycharm/) is highly recommended (free version available for students).
+
+After installing Anaconda, create a new environment by command:
+``` sh
+ $ conda create -n commonroad-py37 python=3.7
 ```
-Always activate your env before you do anything related:
+
+Here the name of the environment is called **commonroad-py37**. You may also change this name as you wish. In such case, don't forget to change it in the following commands as well.
+
+`Always activate` this environment before you do anything related:
+
 ```sh
+  $ conda activate commonroad-py37
+  or
   $ source activate commonroad-py37
 ```
-Make your Jupyter Notebook aware of this new env:
+Install `Jupyter Notebook` and supplementary modules:
 ```sh
+  $ conda install jupyter
   $ conda install ipykernel
-  $ conda install ipython-autotime
+  $ pip install ipython-autotime
   $ conda install ipywidgets
   $ conda install sphinx
-  $ python -m ipykernel install --user --name commonroad-py37 --display-name "Python (commonroad-py37)"
-```
-
-If you need superuser rights for the last step try:
-```sh
-  $ sudo /<root path to>/anaconda3/envs/commonroad-py37/bin/python -m ipykernel install --user --name commonroad-py37 --display-name "Python (commonroad-py37)"
-```
-
-
-Later in the Jupyter Notebook, you should select this kernel so that everything runs in this particular environment.
-
-
-## How to install
-This software has three main dependencies to install.
-
-### 1. CommonRoad
-Go to folder commonRoad_root/tools/commonroad_io/Python and install the commonroad environment:
-```sh
-  $ conda install networkx
-  $ python setup.py install
-```
-
-
-### 2. CommonRoad-Collision-Checker
-Go to folder commonRoad_root/tools/commonroad-collision-checker/ and follow the Readme file.
-
-### 3. Boundary
-Go to folder commonRoad_root/tools/ and follow the Readme file. Alternatively, you can also use the second method suggested in the troubleshoot.
-
-## How to use
-
-Go to motionAutomata/notebooks and start Jupyter:
-```sh
-  $ jupyter notebook
-```
-
-If you are using Anaconda environments like we suggested, remember to switch to the kernel of the Jupyter Notebook: click kernel -> change kernel -> Python(commonroad-py37).
-
-In case that the jupyter widget is not working (section: Visualize planned trajectory):
-```sh
   $ jupyter nbextension install --py widgetsnbextension --user
   $ jupyter nbextension enable widgetsnbextension --user --py
 ```
 
+## Installation guide
+
+Please follow this installation guide if you are using your own machine. Alternatively, you can use the virtual machine image provide by us, in which all the necessary modules are installed for you already.
+
+This exercise has three main dependencies that need to be installed.
+
+### 1. CommonRoad-io
+
+As documented in CommonRoad-io [Documentation](https://commonroad.in.tum.de/static/docs/commonroad-io/index.html), type in the following command to install the package:
+
+```sh
+  $ pip install commonroad-io
+```
+
+
+### 2. CommonRoad-Collision-Checker
+Go to folder `GSMP/tools/commonroad-collision-checker/` and follow the instruction in README.rst. (You may navigate to it from this page by  for a better rendering of the .rst file)
+
+A tutorial of CommonRoad Collision Checker can be found [here](https://commonroad.in.tum.de/tutorials/).
+
+### 3. CommonRoad-Road-Boundary
+Go to folder `GSMP/tools/commonroad-road-boundary/` and follow the instruction in README.md. (You may navigate to it from this page by  for a better rendering of the .md file) In case you face an error, refer to troubleshooting section. 
+
+## Tutorials
+
+Navigate your terminal to `commonroad-search/` folder, and start Jupyter Notebook with:
+```shell
+  $ jupyter notebook
+```
+
+In the prompt up page, navigate to `notebooks/tutorials/` and follow the tutorials `tutorial_commonroad-io.ipynb` and `tutorial_commonroad-search.ipynb`.  Remember to refer to `tutorials/0_Guide_for_Exercise.pdf` for additional explanation. The executed Jupyter notebooks for tutorials can also be found [here](https://commonroad.in.tum.de/tutorials/).
+
 ## Implement your own search algorithm
 
-Go to motionAutomata/Automata and open MotionPlanner.py. Insert the search algorithm of your choice in the function:
+Open `GSMP/motion_automata/automata/MotionPlanner.py`. Write your own heuristic functions and/or search algorithm in the following functions:
 
 ```python
-  def search_alg(self, startSuccessor, maxTreeDepth, status)
+	def calc_heuristic_cost()
+	def search_alg()
 ```
 
-There are already 2 search algorithms (A star and Greedy-best-first search) implemented as examples for you. Please check the first cell of the notebook to see how to use them.
+There are already two search algorithms, namely `A*` and `Greedy Best First Search`, implemented as examples for you. You are free to refer to them for some inspiration.
 
+## Troubleshooting
 
+### 1. Boundary library not working properly
 
-## Troubleshoot:
-
-**1**
-If you get errors when executing "python setup.py install", try the following equivalent command:
-```
-  $ sudo /<root path to>/anaconda3/envs/commonroad-py37/bin/python setup.py install
-```
-
-**2**
-If there are errors related to not finding the boundary library (e.g. can not find module construction) when using the jupyter notebook, try to manually move all the contents of boundary folder (not simply copy the whole folder but to copy all files directly under this folder) into /path/to/your/anaconda/envs/lib/python3.7/site-packages.
-
-The path typically looks like this: /home/USER-NAME/anaconda3/envs/commonroad-py37/lib/python3.7/site-packages
+If there are errors stating not finding the boundary library (e. g. module `construction` not found) while going through the second tutorial, try manually copying all the contents under folder `GSMP/tools/commonroad-road-boundary/`  into `/path/to/your/anaconda3/envs/lib/python3.7/site-packages/commonroad-road-boundary/`. 
+`Make sure to copy all files within the folder manually, not just copying the folder it self. Also, remember to add this path to your IDE's (e. g. PyCharm) interpretor path.`
