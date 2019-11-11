@@ -20,9 +20,11 @@ commonroad-search/
 		└tutorial/
 	└solutions/ 
 ```
-The codes are written in Python 3.7 and tested on Ubuntu 18.04. Please follow the installation guide below and further proceed with `notebooks/tutorials/0_Guide_for_Exercise.pdf`. 
+The codes are written in Python 3.7 and tested on Ubuntu 18.04. Please follow the installation guide below if you are using your own machine. Alternatively, you can use the virtual machine image provide by us, in which all the necessary modules are installed for you already. You can down the virtual machine via [this](https://syncandshare.lrz.de/dlpw/fi2BN8NUepqiQzfG3LzWYf4J/Virtual_Machine.zip) link, the downloading password and default login password are both `commonroad`. After you installed the softwares, or if you intend to use the virtual machine, please further proceed with `notebooks/tutorials/0_Guide_for_Exercise.pdf`. 
 
 ## Before you start
+
+`Skip this section if you intend to use the provided virtual machine.`
 
 We recommend using [Anaconda](https://www.anaconda.com/) to manage your environment so that even if you mess up something, you can always have a safe and clean restart. A guide for managing the environments can be found [here](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html). Also, the usage of [PyCharm](https://www.jetbrains.com/pycharm/) is highly recommended (free version available for students).
 
@@ -53,7 +55,7 @@ Install `Jupyter Notebook` and supplementary modules:
 
 ## Installation guide
 
-Please follow this installation guide if you are using your own machine. Alternatively, you can use the virtual machine image provide by us, in which all the necessary modules are installed for you already.
+`Skip this section if you intend to use the provided virtual machine.`
 
 This exercise has three main dependencies that need to be installed.
 
