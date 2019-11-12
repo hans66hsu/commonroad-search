@@ -34,7 +34,7 @@ You can either install the softwares on your own machine, use a virtual machine 
 docker run -it -p 9000:8888 --mount src="$(pwd)",target=/commonroad-search,type=bind tomdoerr/commonroad-search
 ```
 
-​			and open the Jupyter Notebook by visiting `localhost:9000` in your web browser.
+&ensp;&ensp;&ensp;&ensp;&ensp;and open the Jupyter Notebook by visiting `localhost:9000` in your web browser.
 
 After you have set up your environment, please further proceed with `notebooks/tutorials/0_Guide_for_Exercise.pdf`. 
 
