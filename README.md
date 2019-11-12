@@ -20,11 +20,27 @@ commonroad-search/
 		└tutorial/
 	└solutions/ 
 ```
-The codes are written in Python 3.7 and tested on Ubuntu 18.04. Please follow the installation guide below if you are using your own machine. Alternatively, you can use the virtual machine image provide by us, in which all the necessary modules are installed for you already. You can down the virtual machine via [this](https://syncandshare.lrz.de/dlpw/fi2BN8NUepqiQzfG3LzWYf4J/Virtual_Machine.zip) link, the downloading password and default login password are both `commonroad`. After you installed the softwares, or if you intend to use the virtual machine, please further proceed with `notebooks/tutorials/0_Guide_for_Exercise.pdf`. 
+The codes are written in Python 3.7 and tested on Ubuntu 18.04. 
 
-## Before you start
+## Ways to Install
 
-`Skip this section if you intend to use the provided virtual machine.`
+You can either install the softwares on your own machine, use a virtual machine image or run a docker image.
+
+1. Please follow the installation guide below if you are using your own machine.
+2. Alternatively, you can use the virtual machine image provide by us, in which all the necessary modules are installed already. You can down the virtual machine image via [this](https://syncandshare.lrz.de/dlpw/fi2BN8NUepqiQzfG3LzWYf4J/Virtual_Machine.zip) link and run it in Virtual Box. The downloading password and default login password are both `commonroad`. 
+3. Also, you can run a docker image provided by Tom Dörr. After installing docker, you can run the image using command
+
+```sh
+docker run -it -p 9000:8888 --mount src="$(pwd)",target=/commonroad-search,type=bind tomdoerr/commonroad-search
+```
+
+​		and open the Jupyter Notebook by visiting `localhost:9000` in your web browser.
+
+After you have set up your environment, please further proceed with `notebooks/tutorials/0_Guide_for_Exercise.pdf`. 
+
+## Installation guide
+
+`Skip this section if you intend to use the provided virtual machine or docker image.`
 
 We recommend using [Anaconda](https://www.anaconda.com/) to manage your environment so that even if you mess up something, you can always have a safe and clean restart. A guide for managing the environments can be found [here](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html). Also, the usage of [PyCharm](https://www.jetbrains.com/pycharm/) is highly recommended (free version available for students).
 
@@ -52,10 +68,6 @@ Install `Jupyter Notebook` and supplementary modules:
   $ jupyter nbextension install --py widgetsnbextension --user
   $ jupyter nbextension enable widgetsnbextension --user --py
 ```
-
-## Installation guide
-
-`Skip this section if you intend to use the provided virtual machine.`
 
 This exercise has three main dependencies that need to be installed.
 
