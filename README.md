@@ -66,6 +66,7 @@ Install `Jupyter Notebook` and supplementary modules:
   $ pip install ipython-autotime
   $ conda install ipywidgets
   $ conda install sphinx
+  $ conda install scipy
   $ jupyter nbextension install --py widgetsnbextension --user
   $ jupyter nbextension enable widgetsnbextension --user --py
 ```
