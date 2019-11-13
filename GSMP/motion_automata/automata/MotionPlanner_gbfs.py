@@ -15,6 +15,7 @@ import heapq
 import copy
 from typing import *
 
+# example Greedy Best First Search planner
 
 class MotionPlanner:
     def __init__(self, scenario, planningProblem, automata):

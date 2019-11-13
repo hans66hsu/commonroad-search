@@ -15,6 +15,7 @@ commonroad-search/
 		├batch_processing/
 		├motion_primitives_generator/
 		└tutorials/
+	├pdfs/	
 	├scenarios/
 		├exercise/
 		└tutorial/
@@ -36,7 +37,7 @@ docker run -it -p 9000:8888 --mount src="$(pwd)",target=/commonroad-search,type=
 
 &ensp;&ensp;&ensp;&ensp;&ensp;and open the Jupyter Notebook by visiting `localhost:9000` in your web browser.
 
-After you have set up your environment, please further proceed with `notebooks/tutorials/0_Guide_for_Exercise.pdf`. 
+After you have set up your environment, please further proceed with `pdfs/0_Guide_for_Exercise.pdf`. 
 
 ## Installation guide
 
@@ -81,12 +82,12 @@ As documented in CommonRoad-io [Documentation](https://commonroad.in.tum.de/stat
 
 
 ### 2. CommonRoad-Collision-Checker
-Go to folder `GSMP/tools/commonroad-collision-checker/` and follow the instruction in README.rst. (You may navigate to it from this page by  for a better rendering of the .rst file)
+Go to folder `GSMP/tools/commonroad-collision-checker/` and follow the instruction in README.rst. (You may navigate to it from this page for a better rendering of the .rst file)
 
 A tutorial of CommonRoad Collision Checker can be found [here](https://commonroad.in.tum.de/tutorials/).
 
 ### 3. CommonRoad-Road-Boundary
-Go to folder `GSMP/tools/commonroad-road-boundary/` and follow the instruction in README.md. (You may navigate to it from this page by  for a better rendering of the .md file) In case you face an error, refer to troubleshooting section. 
+Go to folder `GSMP/tools/commonroad-road-boundary/` and follow the instruction in README.md. (You may navigate to it from this page for a better rendering of the .md file) In case you face an error, refer to troubleshooting section. 
 
 ## Tutorials
 
@@ -95,7 +96,7 @@ Navigate your terminal to `commonroad-search/` folder, and start Jupyter Noteboo
   $ jupyter notebook
 ```
 
-In the prompt up page, navigate to `notebooks/tutorials/` and follow the tutorials `tutorial_commonroad-io.ipynb` and `tutorial_commonroad-search.ipynb`.  Remember to refer to `tutorials/0_Guide_for_Exercise.pdf` for additional explanation. The executed Jupyter notebooks for tutorials can also be found [here](https://commonroad.in.tum.de/tutorials/).
+In the prompt up page, navigate to `notebooks/tutorials/` and follow the tutorials `tutorial_commonroad-io.ipynb` and `tutorial_commonroad-search.ipynb`.  Remember to refer to `pdfs/0_Guide_for_Exercise.pdf` for additional explanation. The executed Jupyter notebooks for tutorials can also be found [here](https://commonroad.in.tum.de/tutorials/).
 
 ## Implement your own search algorithm
 

@@ -15,6 +15,8 @@ import heapq
 import copy
 from typing import *
 
+# example Greedy Best First Search planner with a heuristic function 
+# that only considers the time_step of the goal region
 
 class MotionPlanner:
     def __init__(self, scenario, planningProblem, automata):
@@ -483,7 +485,7 @@ class MotionPlanner:
         :param path: The path for which you want to calculate the cost
         :param curPos: Last state of your current path. Every state has the following variables: position, velocity, orientation, time_step
         """
-        # a heuristic that considers time and goal lane (if any)
+        # a heuristic that only considers time of goal
         if hasattr(self.planningProblem.goal.state_list[0], 'time_step'):
             time_step_goal = (self.planningProblem.goal.state_list[0].time_step.start + \
                               self.planningProblem.goal.state_list[0].time_step.end) / 2

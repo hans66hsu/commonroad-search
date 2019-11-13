@@ -59,11 +59,14 @@ def execute_search_batch(scenario, planning_problem_set, veh_type_id=2,
 	motion_planner = MotionPlanner(scenario, planning_problem, automata)
 
 	print("Start search..")
+	time_start = time.process_time()
 	result = motion_planner.search_alg(initial_motion_primitive.Successors, max_tree_depth)
-
+	time_end = time.process_time()
+	print("Solving this scenario took {} seconds".format(round(time_end - time_start, 2)))
 	dict_result = {}
 	# result is in form of (final path, used_primitives)
 	if result is not None:
+		
 		result_path = result[0]
 
 		list_state = list()

@@ -25,4 +25,4 @@ default:
     # vehicle type, e.g, BMW 320i
   vehicle_type: BMW_320i
     # cost function
-  cost_function: JB1
+  cost_function: SM1

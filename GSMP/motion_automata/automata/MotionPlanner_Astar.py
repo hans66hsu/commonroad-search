@@ -16,6 +16,7 @@ from typing import *
 import warnings
 import copy
 
+# example A* planner
 
 class MotionPlanner:
     def __init__(self, scenario, planningProblem, automata):
