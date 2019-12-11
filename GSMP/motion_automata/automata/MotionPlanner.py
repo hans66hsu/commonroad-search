@@ -12,6 +12,7 @@ import numpy as np
 import math
 import construction
 import heapq
+import copy
 from typing import *
 
 
@@ -21,6 +22,7 @@ class MotionPlanner:
         self.scenario = scenario
         self.planningProblem = planningProblem
         self.automata = automata
+
         self.egoShape = automata.egoShape
 
         # create necessary attributes
@@ -40,16 +42,18 @@ class MotionPlanner:
         self.startLanelet_ids = self.scenario.lanelet_network.find_lanelet_by_position(
             [self.planningProblem.initial_state.position])[0]
 
+        self.goalLanelet_ids = None
         # get lanelet id of the ending lanelet (of goal state),this depends on type of goal state
-        if hasattr(self.planningProblem.goal.state_list[0].position, 'center'):
-            self.goalLanelet_ids = self.scenario.lanelet_network.find_lanelet_by_position(
-                [self.planningProblem.goal.state_list[0].position.center])[0]
+        if hasattr(self.planningProblem.goal.state_list[0], 'position'):
+            if hasattr(self.planningProblem.goal.state_list[0].position, 'center'):
+                self.goalLanelet_ids = self.scenario.lanelet_network.find_lanelet_by_position(
+                    [self.planningProblem.goal.state_list[0].position.center])[0]
 
-        elif hasattr(planningProblem.goal.state_list[0].position, 'shapes'):
-            self.goalLanelet_ids = self.scenario.lanelet_network.find_lanelet_by_position(
-                [self.planningProblem.goal.state_list[0].position.shapes[0].center])[0]
-            self.planningProblem.goal.state_list[0].position.center = \
-                self.planningProblem.goal.state_list[0].position.shapes[0].center
+            elif hasattr(planningProblem.goal.state_list[0].position, 'shapes'):
+                self.goalLanelet_ids = self.scenario.lanelet_network.find_lanelet_by_position(
+                    [self.planningProblem.goal.state_list[0].position.shapes[0].center])[0]
+                self.planningProblem.goal.state_list[0].position.center = \
+                    self.planningProblem.goal.state_list[0].position.shapes[0].center
 
         # set specifications from given goal state
         if hasattr(self.planningProblem.goal.state_list[0], 'time_step'):
@@ -68,21 +72,25 @@ class MotionPlanner:
             self.desired_orientation = Interval(-math.pi, math.pi)
 
         # create necessary attributes
-        self.initial_distance = distance(planningProblem.initial_state.position,
-                                         planningProblem.goal.state_list[0].position.center)
+        if hasattr(planningProblem.goal.state_list[0], 'position'):
+            self.initial_distance = distance(planningProblem.initial_state.position,
+                                             planningProblem.goal.state_list[0].position.center)
+        else:
+            self.initial_distance = 0
 
         # set lanelet costs to -1, except goal lanelet
         self.lanelet_cost = {}
         for lanelet in scenario.lanelet_network.lanelets:
             self.lanelet_cost[lanelet.lanelet_id] = -1
 
-        for goal_lanelet_id in self.goalLanelet_ids:
-            self.lanelet_cost[goal_lanelet_id] = 0
+        if self.goalLanelet_ids is not None:
+            for goal_lanelet_id in self.goalLanelet_ids:
+                self.lanelet_cost[goal_lanelet_id] = 0
 
-        # calculate costs for lanelets, this is a recursive method
-        for goal_lanelet_id in self.goalLanelet_ids:
-            visited_lanelets = []
-            self.calc_lanelet_cost(self.scenario.lanelet_network.find_lanelet_by_id(goal_lanelet_id), 1, visited_lanelets)
+            # calculate costs for lanelets, this is a recursive method
+            for goal_lanelet_id in self.goalLanelet_ids:
+                visited_lanelets = []
+                self.calc_lanelet_cost(self.scenario.lanelet_network.find_lanelet_by_id(goal_lanelet_id), 1, visited_lanelets)
 
         # construct commonroad boundaries and collision checker object
         build = ['section_triangles', 'triangulation']
@@ -102,8 +110,8 @@ class MotionPlanner:
         """
         Find all obstacles that are located in every lanelet at time step t and returns a dictionary where obstacles are stored according to lanelet id.
 
-        :param time_step: The time step in which the obstacle is in the current lanelet network.
-        :Return type: dict[lanelet_id]
+        :param time_step: The time step in which the obstacle is in the current lanelet network. 
+        :Return type: dict[lanelet_id] 
         """
         mapping = {}
         for lanelet in self.lanelet_network.lanelets:
@@ -118,8 +126,8 @@ class MotionPlanner:
         """
         Returns the subset of obstacles, which are located in the given lanelet.
 
-        :param laneletObj: specify the lanelet object to get its obstacles
-        :param time_step: the time step in which the occupancy of obstacles is checked
+        :param laneletObj: specify the lanelet object to get its obstacles.
+        :param time_step: The time step for the occupancy to check.
         
         """
         # output list
@@ -191,7 +199,7 @@ class MotionPlanner:
         """
         Returns lanelet orientation (angle in radian, counter-clockwise defined) at the given position and lanelet id.
 
-        :param lanelet_id: id of the lanelet, based on which the orientation is calculated
+        :param lanelet_id: id of the lanelet, based on which the orientation is calculated.
         :param pos: position, where orientation is calculated. (Often the position of the obstacle)
 
         """
@@ -201,23 +209,26 @@ class MotionPlanner:
 
     def calc_angle_to_goal(self, state: State) -> float:
         """
-        Returns the orientation of the goal (angle in radian, counter-clockwise defined) with respect to the position of the state.
+        Returns the orientation of the goal (angle in radian, counter-clockwise defined) with respect to position of the state.
 
-        :param state: the angle between this state and the goal will be calculated
+        :param state: the angle between this state and the goal will be calculated.
 
         """
 
         curPos = state.position
-        goalPos = self.planningProblem.goal.state_list[0].position.center
-        return math.atan2(goalPos[1] - curPos[1], goalPos[0] - curPos[0])
+        if hasattr(self.planningProblem.goal.state_list[0], 'position'):
+            goalPos = self.planningProblem.goal.state_list[0].position.center
+            return math.atan2(goalPos[1] - curPos[1], goalPos[0] - curPos[0])
+        else:
+            return 0
 
-    def lanelets_of_position(self, lanelets: List[int], state: State, diff: float = math.pi/5) -> List[int]:
+    def lanelets_of_position(self, lanelets: List[int], state: State, diff=math.pi / 5) -> List[int]:
         """
-        Returns all lanelets, whose angle to the orientation of the input state are smaller than pi/5.
+        Returns all lanelets, the angle between which and the orientation of the input state is smaller than pi/5.
 
-        :param lanelets: potential lanelets
-        :param state: the input state
-        :param diff: acceptable angle difference between the state and the lanelet
+        :param lanelets: lanelets, whose orientation is considered.
+        :param state: the state, whose orientation is considered.
+        :param diff: acceptable angle difference between the state and the lanelet.
 
         """
 
@@ -227,20 +238,22 @@ class MotionPlanner:
             laneletOrientationAtPosition = calcAngleOfPosition(laneletObj.center_vertices, state.position)
             if math.pi - abs(abs(laneletOrientationAtPosition - state.orientation) - math.pi) < diff:
                 correctLanelets.append(laneletId)
+
         while len(correctLanelets) > 0:
-            if self.lanelet_cost[correctLanelets[0]] == -1: 
+            if self.lanelet_cost[correctLanelets[0]] == -1:
                 correctLanelets.pop(0)
             else:
                 break
+
         return correctLanelets
 
     def dist_to_closest_obstacle(self, lanelet_id: int, pos: np.ndarray, time_step: int) -> float:
         """
-        Returns distance between the given position and the center of the closest obstacle in the given lanelet (specified by lanelet id).
+        Returns distance between the input position and the center of the closest obstacle in the respective lanelet (specified by input lanelet id).
 
-        :param lanelet_id: the id of the lanelet where the distance to obstacle is calculated
-        :param pos: current input position
-        :param time_step: current time step
+        :param lanelet_id: the id of the lanelet where distance is calculated.
+        :param pos: current position, from which the distance is calculated.
+        :param time_step: current time step.
 
         """
 
@@ -253,13 +266,14 @@ class MotionPlanner:
 
     def num_obstacles_in_lanelet_at_time_step(self, time_step: int, lanelet_id: int) -> int:
         """
-        Returns the number of obstacles in the given lanelet (specified by lanelet id) at time step t.
+        Returns the number of obstacles in the given lanelet at time step t.
 
-        :param time_step: time step
-        :param lanelet_id: specifies the lanelet
+        :param time_step: time step.
+        :param lanelet_id: id of the lanelet whose obstacles are considered.
 
         """
-        obstacles_in_lanelet = self.get_obstacles(self.scenario.lanelet_network.find_lanelet_by_id(lanelet_id), time_step)
+        obstacles_in_lanelet = self.get_obstacles(self.scenario.lanelet_network.find_lanelet_by_id(lanelet_id),
+                                                  time_step)
         return len(obstacles_in_lanelet)
 
     def is_adjacent(self, start_lanelet_id: int, final_lanelet_id: int) -> bool:
@@ -268,7 +282,7 @@ class MotionPlanner:
 
         :param start_lanelet_id: id of the first lanelet (start lanelet).
         :param final_lanelet_id: id of the second lanelet (final lanelet).
-
+        
         """
 
         laneletObj = self.scenario.lanelet_network.find_lanelet_by_id(start_lanelet_id)
@@ -287,7 +301,7 @@ class MotionPlanner:
 
         :param start_lanelet_id: id of the first lanelet (start lanelet).
         :param final_lanelet_id: id of the second lanelet (final lanelet).
-
+        
         Return type: bool
         """
 
@@ -303,7 +317,7 @@ class MotionPlanner:
         Returns true if the goal is in the given lanelet or any successor (including all successors of successors) of the given lanelet.
 
         :param lanelet_id: the id of the given lanelet.
-        :param traversed_lanelets: helper variable which stores potential path (a list of lanelet id) to goal lanelet. Initialized to None.
+        :param traversed_lanelets: helper variable which stores potential path (a list of lanelet id) to goal lanelet. Initialized to None. 
 
         """
         if traversed_lanelets is None:
@@ -329,7 +343,7 @@ class MotionPlanner:
         """
         Returns time cost (number of time steps) to perform the given path.
 
-        :param path: the path whose time cost is calculated
+        :param path: the path on which the time cost is calculated.
         """
         return path[-1].time_step - path[0].time_step
 
@@ -337,51 +351,58 @@ class MotionPlanner:
         """
         Returns the path efficiency = travelled_distance / time_cost
 
-        :param path: the path whose efficiency is calculated
+        :param path: the path whose efficiency should be calculated.
         """
-        return calc_travelled_distance(path)/self.calc_time_cost(path)
+        return calc_travelled_distance(path) / self.calc_time_cost(path)
 
     def calc_heuristic_distance(self, state: State, distance_type=0) -> float:
         """
         Returns the heuristic distance between the current state and the goal state.
 
-        :param state: the state, whose heuristic distance to the goal is calculated
-        :param distance_type: default is euclidean distance. For other distance type please refer to the function "distance(pos1: np.ndarray, pos2: np.ndarray, type=0)"
+        :param state: the state, whose heuristic distance to the goal is calculated.
+        :param distance_type: 0: euclideanDistance, 1: manhattanDistance, 2: chebyshevDistance, 3: sumOfSquaredDifference,
+                              4: meanAbsoluteError, 5: meanSquaredError, 6: canberraDistance, 7: cosineDistance
         """
 
-        curPos = state.position
-        goalPos = self.planningProblem.goal.state_list[0].position.center
-        return distance(curPos, goalPos, distance_type)
-        
-    def calc_heuristic_lanelet(self, path: List[State]) -> Union[Tuple[None, None, None], Tuple[float, list, list]]:
+        if hasattr(self.planningProblem.goal.state_list[0], 'position'):
+            curPos = state.position
+            goalPos = self.planningProblem.goal.state_list[0].position.center
+            return distance(curPos, goalPos, distance_type)
+        else:
+            return 0
+
+    def calc_heuristic_lanelet(self, path: List[State]):
         """
-        Calculates the distance between every individual state of the path and the centers of the path's corresponding lanelets and sum them up.
+        Calculated the distance between every individual state of the path and the centers of their corresponding lanelets and sum them up.
 
-        :param path: the path, whose heuristics is calculated
+        :param path: the path, whose heuristics is calculated.
 
-        Returns the heuristic distance of the path (float), id of the end lanelet of the given path (list) and the start lanelet id (list). 
-        End lanelet means the lanelet where the last state of the path is in, start lanelet means the lanelet corresponding to the first state of the path.
+        Returns the heuristic distance of the path (int), id of the end lanelet of the given path (list) and the start lanelet id (list). 
+        End lanelet means the lanelet where the last state pf the path is in, start lanelet means the lanelet corresponding to the first state of the path.
         
         """
         end_lanelet_id = None
         dist = 0
-        start_lanelet_id = self.scenario.lanelet_network.find_lanelet_by_position([path[0].position])[0]  # returns id of the start lanelet
+        start_lanelet_id = self.scenario.lanelet_network.find_lanelet_by_position([path[0].position])[
+            0]  # returns id of the start lanelet
         if not start_lanelet_id:
             return None, None, None
         for i in range(len(path)):
-            lanelets_of_pathSegment = self.lanelets_of_position(self.scenario.lanelet_network.find_lanelet_by_position([path[i].position])[0], path[i])
+            lanelets_of_pathSegment = self.lanelets_of_position(
+                self.scenario.lanelet_network.find_lanelet_by_position([path[i].position])[0], path[i])
             if not lanelets_of_pathSegment:
                 return None, None, None  # return none if path element is not in a lanelet with correct orientation
             laneletObj = self.scenario.lanelet_network.find_lanelet_by_id(lanelets_of_pathSegment[0])
-            dist = dist + findDistanceToNearestPoint(laneletObj.center_vertices, path[i].position)  # distance to center line
+            dist = dist + findDistanceToNearestPoint(laneletObj.center_vertices,
+                                                     path[i].position)  # distance to center line
             end_lanelet_id = lanelets_of_pathSegment
-        return dist, end_lanelet_id, start_lanelet_id 
+        return dist, end_lanelet_id, start_lanelet_id
 
     def reached_goal(self, path: List[State]) -> bool:
         """
         Goal-test every state of the path and returns true if one of the state satisfies all conditions for the goal region: position, orientation, velocity, time.
 
-        :param path: the path to be goal-tested
+        :param path: the path to be goal-tested.
 
         """
         for i in range(len(path)):
@@ -391,13 +412,13 @@ class MotionPlanner:
 
     def remove_states_behind_goal(self, path: List[State]) -> List[State]:
         """
-        Removes all states that are behind the state which satisfies goal state conditions and returns the pruned path.
+        Remove all states that are behind the state which statisfies the goal conditions and return the pruned path.
 
-        :param path: the path to be pruned
+        :param path: the path to be pruned.
         """
         for i in range(len(path)):
             if self.planningProblem.goal.is_reached(path[i]):
-                for j in range(i+1, len(path)):
+                for j in range(i + 1, len(path)):
                     path.pop()
                 return path
         return path
@@ -424,45 +445,286 @@ class MotionPlanner:
     @staticmethod
     def translate_primitive_to_current_state(primitive: MotionPrimitive, path_current: List[State]) -> List[State]:
         """
-        Uses the trajectory defined in the given primitive, translates it towards the last state of current path and returns the list of new path.
-        In the newly appended part (created through translation of the primitive) of the path, the position, orientation and time step are changed, but the velocity is not changed.
+        Uses the value of the given primitive, translate them towards the last state of current path and returns the list of new path.
+        In the newly appended part of the path, the position, orientation and time step are changed, but the velocity is not changed.
         Attention: The input primitive itself will not be changed after this operation.
 
-        :param primitive: the primitive to be translated
-        :param path_current: the path whose last state is the goal state for the translation
+        :param primitive: the primitive to be translated.
+        :param path_current: the path whose last state is the reference state for the translation.
         """
         return primitive.appendTrajectoryToState(path_current[-1])
 
     @staticmethod
-    def append_path(path_current: List[State], newPath: List[State]) -> List[State]:
+    def append_path(path_current: List[State], pathNew: List[State]) -> List[State]:
         """
         Appends a new path to the current path and returns the whole path.
 
-        :param path_current: current path which is to be extended
-        :param newPath: new path which is going to be added to the current path
+        :param path_current: current path which is to be extended.
+        :param pathNew: new path which is going to be added to the current path.
         """
         path = path_current[:]
-        path.extend(newPath)
+        path.extend(pathNew)
         return path
 
     @staticmethod
     def get_successor_primitives(cur_primitive: MotionPrimitive) -> List[MotionPrimitive]:
         """
-        Returns all possible successor primitives of the current primitive.
+        Returns all possible successor primitives of the current primitive
 
-        :param cur_primitive: current primitive
+        :param cur_primitive: current primitive.
         """
         return cur_primitive.Successors
 
     def calc_heuristic_cost(self, path: List[State], curPos: State) -> float or int:
         # Define your own heuristic cost function here.
-        cost = 0
-        return cost
+        factor = 1 
+        if hasattr(self.planningProblem.goal.state_list[0], 'time_step'):
+            time_step_goal = 3*(self.planningProblem.goal.state_list[0].time_step.start + \
+                              self.planningProblem.goal.state_list[0].time_step.end) / 4
+
+            if path[-1].time_step <= time_step_goal:
+                dist_time = time_step_goal - path[-1].time_step
+            else:
+                dist_time_min = math.inf 
+                for state in path:
+                    dist_time = abs(state.time_step - time_step_goal)
+                    if dist_time < dist_time_min: dist_time_min = dist_time
+                dist_time = dist_time_min
+                
+            distStartState = self.calc_heuristic_distance(path[0])
+            distLastState = self.calc_heuristic_distance(path[-1])
+            if (distLastState is None) or (distStartState < distLastState) :
+#                 print(distStartState < distLastState)
+                return None
+            elif distLastState < 0.5:
+                factor = factor * 0.00001
+
+            
+            orientationToGoalDiff_min = math.inf
+            for state in path:
+                angleToGoal = self.calc_angle_to_goal(state)
+                orientationToGoalDiff = orientation_diff(angleToGoal, state.orientation)
+                if orientationToGoalDiff < orientationToGoalDiff_min: orientationToGoalDiff_min = orientationToGoalDiff
+            orientationToGoalDiff = orientationToGoalDiff_min    
+            
+        else:
+            dist_time = 0
+            orientationToGoalDiff = 0 
+            distLastState = 0
+                  
+#       The above is for Survival Mode
+
+        if hasattr(self.planningProblem.goal.state_list[0], 'velocity') and hasattr(self.planningProblem.goal.state_list[0], 'orientation'):
+
+                
+            path_dis, final_lanelet_id, start_lanelet_id = self.calc_heuristic_lanelet(path)
+            if start_lanelet_id is None or final_lanelet_id is None or path_dis is None:
+                return None
+            start_lanelet_cost = self.lanelet_cost[start_lanelet_id[0]]
+            final_lanelet_cost = self.lanelet_cost[final_lanelet_id[0]]
+
+            if  ((final_lanelet_cost == -1) or ( final_lanelet_cost > start_lanelet_cost ) ):
+                return None
+            elif final_lanelet_cost < start_lanelet_cost:
+                factor = factor * 0.1
+            if self.is_goal_in_lane(final_lanelet_id[0]): factor=factor*0.07
+            pathLength = calc_travelled_distance(path); travel_dist_cost=100-pathLength 
+            cost_time = self.calc_time_cost(path)
+
+        else:
+            dist_time = dist_time * 0.9
+            distLastState = distLastState
+            path_dis=0
+            travel_dist_cost=0
+            cost_time = 0
+           
+        if hasattr(self.planningProblem.goal.state_list[0], 'velocity'):
+
+            
+            v_mean_goal = (self.planningProblem.goal.state_list[0].velocity.start + 
+                           self.planningProblem.goal.state_list[0].velocity.end) / 2
+            dist_vel = abs(path[-1].velocity - v_mean_goal)
+        else:
+            dist_vel = 0
+
+            
+        if hasattr(self.planningProblem.goal.state_list[0], 'orientation'):
+            o_mean_goal = (self.planningProblem.goal.state_list[0].orientation.start + 
+                           self.planningProblem.goal.state_list[0].orientation.end) / 2
+            
+            dist_o = abs(path[-1].orientation - o_mean_goal)
+        else:
+            dist_o = 0
+
+ 
+        
+            
+
+        weigths = np.zeros(8) 
+        weigths[0] = 9
+        if abs(orientationToGoalDiff) > 1.1 and not (distStartState < distLastState):
+            weigths[1] = 10
+        else:
+            weigths[1] = 0.02
+        weigths[2] = 0.5
+        weigths[3] = 0.06
+        weigths[4] = 0.05
+        weigths[5] = 1.2
+        weigths[6] = 0
+        if distStartState < distLastState:
+            weigths[7] = 11
+        else: weigths[7] = 0.04; 
+  
+
+        cost = weigths[0] * (path_dis / len(path)) + \
+               weigths[1] * abs(orientationToGoalDiff) + \
+               weigths[2] * distLastState + \
+               weigths[3] * cost_time + \
+               weigths[4] * travel_dist_cost + \
+               weigths[5] * dist_vel + \
+               weigths[6] * dist_o + \
+               weigths[7] * dist_time 
+        
+        if cost<0: cost = 0                             
+        return cost * factor
+
+
+# /////////////        
+
+#             path_dis, final_lanelet_id, start_lanelet_id = self.calc_heuristic_lanelet(path)
+#             self.calc_path_efficiency(path)
+#             self.num_obstacles_in_lanelet_at_time_step(path[-1].time_step, final_lanelet_id[0])
+#             laneletOrientationAtPosition = self.calc_lanelet_orientation(final_lanelet_id[0], path[-1].position)
+            # elif math.pi - abs(abs(laneletOrientationAtPosition - path[-1].orientation)
+
+        
 
     def search_alg(self, list_successors_start_state: List[MotionPrimitive], max_tree_depth: int, dict_status = None):  # -> Tuple(List[State], List[MotionPrimitive]):
         # Implement your search algorithm here.
+        print(self.planningProblem.goal.state_list[0])
+        total_cost = 0
+        path = [self.initial_state]
+        tree_depth = 0
+        path_appended = [self.initial_state]
+        list_primitives = []
+        priority = 0
+        cost_so_far = {}
+        cost_so_far[self.initial_state] = 0
+
+        # if the goal state is reached by the current path
+        if self.reached_goal(path):
+            # return a pruned path and its corresponding primitives
+            return self.remove_states_behind_goal(path), list_primitives
+
+        # inputs for PriorityQueue: (total_cost,                        : total cost of the path so far
+        #                            path,                              : current path
+        #                            list_successors_primitive_last,    : list of successors of the last primitive in the path
+        #                            tree_depth,                        : tree depth
+        #                            path_appended,                     : the path that is appened in this iteration
+        #                            list_primitives),                  : list of primitives of the current path
+        #                            priority                           : cost of the path / value to be sorted in the heap
+        list_primitives_copied = copy.copy(list_primitives)
+        # add initial state into priority queue
+        self.priority_queue.put((total_cost,                          # : initial cost is 0 
+                                path,                                 # : initial path only contains the initial state
+                                list_successors_start_state,          # : the successors of the initial state
+                                tree_depth,                           # : initial depth is 0
+                                path_appended,                        # : only initial state is added to the path
+                                list_primitives_copied),              # : no primitives added to the list yet
+                                priority)                             # : initial priority is 0
+
+
+        # while the queue is not empty
+        while not self.priority_queue.empty():
+            # get the item with lowest cost from the queue
+            (total_cost, path, list_successors_primitive_last, tree_depth, _, list_primitives) = self.priority_queue.get()
+            list_primitives_copied = copy.copy(list_primitives)
+            
+            status = {'cost_current': total_cost, 
+                      'tree_depth'  : tree_depth, 
+                      'path_current': path}
+
+            if dict_status is not None: dict_status.value = status
+
+            # check whether the tree depth exceeds the maximum allowed number
+            if tree_depth > max_tree_depth:
+                print("reached max tree depth")
+                return None
+            else:
+                tree_depth += 1
+
+            # skip if the time step of the last state of path exceeds that of the goal state
+            if path[-1].time_step > self.desired_time.end:
+                continue
+  
+            # otherwise, expand all successors of the primitive
+            for i in range(len(list_successors_primitive_last)):
+
+                # get a primitive from the list of successors
+                primitive_next = list_successors_primitive_last[i]
+#                 print(primitive_next)
+
+                # add new primitves to the current path
+                # we attach the primitive to current path by translating the pritimive, and 
+                # obtain a path containing the translated states
+                # Note: all motion primitives start at position [0, 0]^T
+                path_primitive_translated = self.translate_primitive_to_current_state(primitive_next, path)
+
+                # skip if the path is None
+                if path_primitive_translated is None:
+                    continue
+
+                # skip if the time step of the last state of path exceeds that of goal state
+                if path_primitive_translated[0].time_step > self.desired_time.end:
+                    continue
+
+                # skip this translated path if it is not collision free
+                if not self.check_collision_free(path_primitive_translated):
+                    continue
+
+                # otherwise, calculated the cost associated with this path
+                # lower cost implies higher priority when expanding
+                # in Greedy BFS, the final cost (f) = heuristic cost (h)
+                cost_final = self.calc_heuristic_cost(path_primitive_translated, path[-1])
+
+                # skip if the cost is not valid
+                if cost_final is None:  
+                    continue
+
+                # if the new primitive passes all conditions listed above, add it into current path
+
+                # update total cost
+                total_cost = total_cost + cost_final
+                
+                # add primitive into the list of primitives
+               
+                # if the goal state is reached by the new path_primitive_translated
+                if self.reached_goal(path_primitive_translated):
+                    # concacenate its predecessor and return result
+                    path_new = path + path_primitive_translated
+
+                    # return a pruned path and its corresponding primitives
+                    return self.remove_states_behind_goal(path_new), list_primitives_copied
+
+                # get new path by concatenating current path and the path translated from the primitve
+                path_new = path + path_primitive_translated
+
+                #Dont revisted the state again, if the cost doesnt decrease! 
+                if str(np.round(path_new[-1].position,1)) not in cost_so_far or cost_final < cost_so_far[str(np.round(path_new[-1].position,1))]:
+                    cost_so_far[str(np.round(path_new[-1].position,1))]=cost_final
+                    list_primitives_copied.append(primitive_next)
+                # push the new path with corresponding values into the priority queue
+                    self.priority_queue.put(
+                        (total_cost, 
+                         path_new, 
+                         self.get_successor_primitives(primitive_next), 
+                         tree_depth, 
+                         path_primitive_translated, 
+                         list_primitives_copied),
+                         cost_final)
+        # return None is no feasible path is found
+        return None
         
-        pass
 
 
 class PriorityQueue:

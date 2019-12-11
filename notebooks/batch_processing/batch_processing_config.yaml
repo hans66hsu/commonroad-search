@@ -26,3 +26,4 @@ default:
   vehicle_type: BMW_320i
     # cost function
   cost_function: SM1
+  planner_id: 3

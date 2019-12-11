@@ -576,6 +576,51 @@ class MotionPlanner:
                weigths[5] * dist_vel
 
         if cost < 0: cost = 0
+#         (dist, lanelet_id, start_lanelet) = self.calc_heuristic_lanelet(path) # TODO: lanelet_id here is actually end_lanelet_id
+
+#         if lanelet_id is None:
+#             heuristic_cost = np.inf
+#             return heuristic_cost
+
+#         dist_to_closest_obst = self.dist_to_closest_obstacle(int(lanelet_id[0]), curPos.position, int(curPos.time_step))
+#         # print("dist to closest obstacle", dist_to_closest_obst)
+
+#         num_obstacels_in_lanelet = self.num_obstacles_in_lanelet_at_time_step(int(curPos.time_step), int(lanelet_id[0]))
+#         # print("num of obsatcles in lane", num_obstacels_in_lanelet)
+
+#         w = 1
+#         if lanelet_id is not None:
+#             lanelet_id = int(lanelet_id[0])
+#             start_lanelet = int(start_lanelet[0])
+#             goal_lanelet_id = int(self.goalLanelet_ids[0])
+
+#             if self.is_adjacent(lanelet_id, goal_lanelet_id):
+#                 w = w * 0.8
+#             if self.is_successor(lanelet_id, goal_lanelet_id):
+#                 w = w * 0.7
+#             if self.is_goal_in_lane(lanelet_id):
+#                 w = w * 0.3
+
+#         efficiency = 1.7-0.2*self.calc_path_efficiency(path)
+
+#         # check if the orientation is close to the final orientation
+#         angle = abs(self.calc_angle_to_goal(curPos))
+
+#         orientationDiff = 1
+
+#         if lanelet_id is not None:
+#             orientation_1 = self.calc_lanelet_orientation(lanelet_id, curPos.position)
+#             orientation_2 = self.desired_orientation
+#             # Median of angle
+#             orientation_2_med = ((orientation_2.start + orientation_2.end) / 2)
+#             orientationDiff = 100 * orientation_diff(orientation_1, orientation_2_med)
+
+
+#         heuristic_dist = self.calc_heuristic_distance(curPos)
+#         heuristic_cost = heuristic_dist * w * angle * efficiency * 15 * orientationDiff * dist # * orientation
+
+#         heuristic_cost = heuristic_dist * 20 + angle * 10
+#         return heuristic_cost
         return cost * factor
 
     def search_alg(self, list_successors_start_state: List[MotionPrimitive], max_tree_depth: int, dict_status = None):  # -> Tuple(List[State], List[MotionPrimitive]):        return None

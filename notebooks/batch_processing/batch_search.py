@@ -1,6 +1,6 @@
 
 def execute_search_batch(scenario, planning_problem_set, veh_type_id=2, 
-						 planning_problem_idx=0, planner_id=1, max_tree_depth=100):
+						 planning_problem_idx=0, planner_id=3, max_tree_depth=100):
 	# append main directory
 	import sys
 	sys.path.append("../../GSMP/tools/")
