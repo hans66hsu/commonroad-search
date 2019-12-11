@@ -216,3 +216,5 @@ TSWLatexianTemp*
 
 # pytest
 .coverage
+
+*.zip
